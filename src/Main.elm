@@ -18,7 +18,7 @@ subscriptions model =
   Sub.none
 
 helloWorld: Model
-helloWorld = { hello = "World" }
+helloWorld = { hello = "Delightful World" }
 
 main : Program Never Model Msg 
 main =
