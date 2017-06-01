@@ -49,8 +49,8 @@ onClickWithoutPropagation message =
 
 
 type Color
-    = Blue
-    | Orange
+    = MainGroupUnselected
+    | MainGroupSelected
 
 
 groupColorAsString : Group -> String
@@ -62,16 +62,16 @@ groupColorAsString group =
 colorAsString : Color -> String
 colorAsString color =
     case color of
-        Blue ->
+        MainGroupUnselected ->
             "blue"
 
-        Orange ->
+        MainGroupSelected ->
             "orange"
 
 
 groupToColor : Group -> Color
 groupToColor group =
     if group.selected then
-        Orange
+        MainGroupSelected
     else
-        Blue
+        MainGroupUnselected
