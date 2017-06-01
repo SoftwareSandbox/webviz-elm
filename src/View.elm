@@ -2,7 +2,8 @@ module View exposing (..)
 
 import Html exposing (Html)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
+import Html.Events exposing (onClick, onWithOptions)
+import Json.Decode as Json exposing (..)
 import Svg exposing (..)
 import Svg.Attributes as SvgAttrs exposing (..)
 import Model exposing (Model, Group)
@@ -18,17 +19,33 @@ view model =
             , SvgAttrs.width "90%"
             , SvgAttrs.height "90%"
             , SvgAttrs.version "1.1"
+            , onClick <| Update.CanvasWasClicked model
             ]
-            [ circle
-                [ SvgAttrs.cx "60"
-                , SvgAttrs.cy "60"
-                , SvgAttrs.r "25"
-                , SvgAttrs.fill <| groupColorAsString model.mainGroup
-                , onClick <| Update.BallWasClicked model
-                ]
-                []
+            [ drawGroup model.mainGroup
             ]
         ]
+
+
+drawGroup : Group -> Svg Msg
+drawGroup mainGroup =
+    circle
+        [ SvgAttrs.cx "60"
+        , SvgAttrs.cy "60"
+        , SvgAttrs.r "25"
+        , SvgAttrs.fill <| groupColorAsString mainGroup
+        , onClickWithoutPropagation <| Update.BallWasClicked mainGroup
+        ]
+        []
+
+
+onClickWithoutPropagation : msg -> Attribute msg
+onClickWithoutPropagation message =
+    onWithOptions
+        "click"
+        { stopPropagation = True
+        , preventDefault = True
+        }
+        (Json.succeed message)
 
 
 type Color
