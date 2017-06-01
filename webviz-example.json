@@ -1,0 +1,40 @@
+{ 
+    "Moobucks" : {
+        "endpoints" : [
+            { "name" : "ordering" },
+            { "name" : "pricing" },
+            { "name" : "coffees" },
+            { "name" : "beans" }
+        ],
+        "external" : [
+            { "owner" : "Joyn",
+              "application": {
+                  "name": "Joyn",
+                  "endpoints": ["payment"]
+              },
+              "contactperson": "support@joyn.com",
+              "purpose": "Electronic loyalty card system"
+            },
+            { "owner" : "Amazon",
+              "application": {
+                  "name": "Echo",
+                  "endpoints": ["echo-orders"]
+              },
+              "contactperson": "alexa@amazon.com",
+              "purpose": "Deliver stuff" 
+            }
+        ],
+        "connections" : [
+            { 
+                "producer" : "ordering",
+                "consumer" : "payment",
+                "why" : "Joyn contacts our ordering service to see if the order matches the request for bonus points."
+            },
+            { 
+                "producer" : "echo-orders",
+                "consumer" : "beans",
+                "why" : "Automatically place an order for coffee beans with Amazon's Echo service when our beans are about to run empty."
+            }
+        ]
+    }
+}
