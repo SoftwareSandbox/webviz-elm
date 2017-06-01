@@ -23,9 +23,7 @@ view model =
                 [ SvgAttrs.cx "60"
                 , SvgAttrs.cy "60"
                 , SvgAttrs.r "25"
-                , SvgAttrs.fill <|
-                    colorAsString <|
-                        groupToColor model.mainGroup
+                , SvgAttrs.fill <| groupColorAsString model.mainGroup
                 , onClick <| Update.BallWasClicked model
                 ]
                 []
@@ -35,7 +33,13 @@ view model =
 
 type Color
     = Blue
-    | MainGroupSelected
+    | Orange
+
+
+groupColorAsString : Group -> String
+groupColorAsString group =
+    colorAsString <|
+        groupToColor group
 
 
 colorAsString : Color -> String
@@ -44,13 +48,13 @@ colorAsString color =
         Blue ->
             "blue"
 
-        MainGroupSelected ->
+        Orange ->
             "orange"
 
 
 groupToColor : Group -> Color
 groupToColor group =
     if group.selected then
-        MainGroupSelected
+        Orange
     else
         Blue
