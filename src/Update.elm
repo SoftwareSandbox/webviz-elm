@@ -11,4 +11,6 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         BallWasClicked model ->
-            ( { model | color = Model.Orange }, Cmd.none )
+            ( { model | mainGroup = Model.selectGroup model.mainGroup }
+            , Cmd.none
+            )
