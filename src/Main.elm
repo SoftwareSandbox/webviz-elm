@@ -1,24 +1,9 @@
 module Main exposing (..)
 
+import Model exposing (Model)
+import Update exposing (update, Msg)
+import View exposing (view)
 import Html exposing (Html)
-
-
-type alias Model =
-    { hello : String }
-
-
-type Msg
-    = Noop
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    ( model, Cmd.none )
-
-
-view : Model -> Html Msg
-view model =
-    Html.h1 [] [ Html.text model.hello ]
 
 
 subscriptions : Model -> Sub Msg
