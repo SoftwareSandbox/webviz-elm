@@ -1,8 +1,6 @@
 # Visualizing a webservices landscape with Elm
 This web application tries to answer the question _Why?_ a certain webservice is userd by a certain application.
 
-[![Build Status](https://travis-ci.org/SoftwareSandbox/webviz-elm.svg?branch=master)](https://travis-ci.org/SoftwareSandbox/webviz-elm)
-
 ## Get it working on your machine
 1. Clone this repository
 
