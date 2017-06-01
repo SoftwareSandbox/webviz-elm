@@ -2,9 +2,10 @@ module View exposing (..)
 
 import Html exposing (Html)
 import Html.Attributes exposing (..)
+import Html.Events exposing (onClick)
 import Svg exposing (..)
 import Svg.Attributes as SvgAttrs exposing (..)
-import Model exposing (Model)
+import Model exposing (Model, colorAsString)
 import Update exposing (Msg)
 
 
@@ -22,7 +23,8 @@ view model =
                 [ SvgAttrs.cx "60"
                 , SvgAttrs.cy "60"
                 , SvgAttrs.r "25"
-                , SvgAttrs.fill "#0009FF"
+                , SvgAttrs.fill <| colorAsString model.color
+                , onClick <| Update.BallWasClicked model
                 ]
                 []
             ]

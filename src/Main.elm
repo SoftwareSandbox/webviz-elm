@@ -1,6 +1,6 @@
 module Main exposing (..)
 
-import Model exposing (Model)
+import Model exposing (Model, Color)
 import Update exposing (update, Msg)
 import View exposing (view)
 import Html exposing (Html)
@@ -13,7 +13,7 @@ subscriptions model =
 
 helloWorld : Model
 helloWorld =
-    { hello = "Delightful World" }
+    Model "Delightful World" Model.Blue
 
 
 main : Program Never Model Msg

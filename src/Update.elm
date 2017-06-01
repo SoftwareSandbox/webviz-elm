@@ -4,9 +4,11 @@ import Model exposing (Model)
 
 
 type Msg
-    = Noop
+    = BallWasClicked Model
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        BallWasClicked model ->
+            ( { model | color = Model.Orange }, Cmd.none )
