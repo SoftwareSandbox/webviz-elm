@@ -5,7 +5,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Svg exposing (..)
 import Svg.Attributes as SvgAttrs exposing (..)
-import Model exposing (Model, colorAsString, groupToColor)
+import Model exposing (Model, Group)
 import Update exposing (Msg)
 
 
@@ -23,9 +23,34 @@ view model =
                 [ SvgAttrs.cx "60"
                 , SvgAttrs.cy "60"
                 , SvgAttrs.r "25"
-                , SvgAttrs.fill <| colorAsString <| groupToColor model.mainGroup
+                , SvgAttrs.fill <|
+                    colorAsString <|
+                        groupToColor model.mainGroup
                 , onClick <| Update.BallWasClicked model
                 ]
                 []
             ]
         ]
+
+
+type Color
+    = Blue
+    | MainGroupSelected
+
+
+colorAsString : Color -> String
+colorAsString color =
+    case color of
+        Blue ->
+            "blue"
+
+        MainGroupSelected ->
+            "orange"
+
+
+groupToColor : Group -> Color
+groupToColor group =
+    if group.selected then
+        MainGroupSelected
+    else
+        Blue

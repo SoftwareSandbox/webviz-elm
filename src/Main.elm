@@ -1,6 +1,6 @@
 module Main exposing (..)
 
-import Model exposing (Model, Color, Group)
+import Model exposing (Model, Group, Info)
 import Update exposing (update, Msg)
 import View exposing (view)
 import Html exposing (Html)
@@ -18,7 +18,12 @@ model =
 
 mainGroup : Group
 mainGroup =
-    Group "MooBucks" [] False { name = "uwmama" }
+    Group "MooBucks" [] False info
+
+
+info : Info
+info =
+    { name = "uwmama" }
 
 
 main : Program Never Model Msg

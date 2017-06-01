@@ -1,21 +1,6 @@
 module Model exposing (..)
 
 
-type Color
-    = Blue
-    | Orange
-
-
-colorAsString : Color -> String
-colorAsString color =
-    case color of
-        Blue ->
-            "blue"
-
-        Orange ->
-            "orange"
-
-
 type alias Model =
     { title : String
     , mainGroup : Group
@@ -43,9 +28,6 @@ selectGroup group =
     { group | selected = True }
 
 
-groupToColor : Group -> Color
-groupToColor group =
-    if group.selected then
-        Orange
-    else
-        Blue
+deselectGroup : Group -> Group
+deselectGroup group =
+    { group | selected = False }
