@@ -10,6 +10,11 @@ import Model exposing (Model, Group, Endpoint)
 import Update exposing (Msg)
 
 
+-- pale orange or whatever: "#f2d391"
+-- light purple "#d6bee0"
+-- purple "#cb9cfc"
+
+
 mainGroupRadius =
     42
 
@@ -96,7 +101,7 @@ drawEndPoint endpoint depth =
                 [ SvgAttrs.cx <| toString (round (toFloat mainGroupRadius * cos circleDegrees))
                 , SvgAttrs.cy <| toString (round (toFloat mainGroupRadius * sin circleDegrees))
                 , SvgAttrs.r "5"
-                , SvgAttrs.fill "red"
+                , SvgAttrs.fill "#d6bee0"
                 ]
                 []
             )
@@ -126,11 +131,13 @@ groupColorAsString group =
 colorAsString : Color -> String
 colorAsString color =
     case color of
+        -- light purple
         MainGroupUnselected ->
-            "blue"
+            "#d6bee0"
 
+        -- purple
         MainGroupSelected ->
-            "orange"
+            "#cb9cfc"
 
 
 groupToColor : Group -> Color
