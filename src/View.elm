@@ -4,7 +4,7 @@ import Html exposing (Html)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onWithOptions)
 import Json.Decode as Json exposing (..)
-import Model exposing (Endpoint, Group, Model, getSelectedGroup)
+import Model exposing (Endpoint, Group, Model, Info, getSelectedGroup)
 import Svg exposing (..)
 import Svg.Attributes as SvgAttrs exposing (..)
 import Update exposing (Msg)
@@ -45,9 +45,14 @@ renderInfoCard group =
 
         Just group ->
             if group.selected then
-                Html.div [ Html.Attributes.style [ ( "float", "right" ) ] ] [ Html.text group.info.name ]
+                renderInfo ( group.name, group.info )
             else
                 Html.div [] []
+
+
+renderInfo : ( String, Info ) -> Html Msg
+renderInfo ( groupName, info ) =
+    Html.div [ Html.Attributes.style [ ( "float", "right" ) ] ] [ Html.text groupName ]
 
 
 drawGroups : List Group -> List (Svg Msg)

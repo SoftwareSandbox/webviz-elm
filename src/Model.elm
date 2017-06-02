@@ -22,7 +22,14 @@ type alias Endpoint =
 
 
 type alias Info =
-    { name : String }
+    { purpose : String
+    , contact : ContactPerson
+    , nfrs : String
+    }
+
+
+type alias ContactPerson =
+    { email : String }
 
 
 selectGroup : Model -> Group -> Model
