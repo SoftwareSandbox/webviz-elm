@@ -5,11 +5,11 @@ import Model exposing (..)
 
 model : Model
 model =
-    Model "WebViz" [ mainGroup, externalGroup1, externalGroup2 ]
+    Model "WebViz" [ moobucksGroup, joynExternalGroup, amazonExternalGroup ]
 
 
-mainGroup : Group
-mainGroup =
+moobucksGroup : Group
+moobucksGroup =
     Group
         "MooBucks"
         [ { name = "ordering" }, { name = "pricing" }, { name = "coffees" }, { name = "beans" } ]
@@ -17,13 +17,13 @@ mainGroup =
         moobucksInfo
 
 
-externalGroup1 : Group
-externalGroup1 =
+joynExternalGroup : Group
+joynExternalGroup =
     Group "Joyn" [ { name = "payment" }, { name = "payment2" } ] False joyninfo
 
 
-externalGroup2 : Group
-externalGroup2 =
+amazonExternalGroup : Group
+amazonExternalGroup =
     Group "Amazon" [ Endpoint "echo-orders" ] False <| amazonInfo
 
 
