@@ -4,7 +4,7 @@ import Html exposing (Html)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onWithOptions)
 import Json.Decode as Json exposing (..)
-import Model exposing (Endpoint, Group, Model, Info, getSelectedGroup)
+import Model exposing (Endpoint, Group, Model, Info, ContactPerson, getSelectedGroup)
 import Svg exposing (..)
 import Svg.Attributes as SvgAttrs exposing (..)
 import Update exposing (Msg)
@@ -59,7 +59,17 @@ renderInfoCard group =
 
 renderInfo : ( String, Info ) -> Html Msg
 renderInfo ( groupName, info ) =
-    Html.div [ Html.Attributes.style [ ( "float", "right" ) ] ] [ Html.text groupName ]
+    let
+        contact =
+            Maybe.withDefault (ContactPerson "") info.contact
+    in
+        Html.div
+            [ Html.Attributes.style [ ( "float", "right" ) ] ]
+            [ Html.p [] [ Html.text groupName ]
+            , Html.p [] [ Html.text info.purpose ]
+            , Html.p [] [ Html.text contact.email ]
+            , Html.p [] [ Html.text info.nfrs ]
+            ]
 
 
 drawGroups : List Group -> List (Svg Msg)

@@ -23,7 +23,7 @@ type alias Endpoint =
 
 type alias Info =
     { purpose : String
-    , contact : ContactPerson
+    , contact : Maybe ContactPerson
     , nfrs : String
     }
 

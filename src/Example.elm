@@ -31,7 +31,7 @@ moobucksInfo : Info
 moobucksInfo =
     Info
         "Provide a REST API for checking orders, pricing, types of coffee and types of beans"
-        (ContactPerson "moorista@moobucks.com")
+        (Just <| ContactPerson "moorista@moobucks.com")
         """Should be able to service ~1.000 calls per second
         99.9999% uptime
         Requires ssl
@@ -42,7 +42,7 @@ joyninfo : Info
 joyninfo =
     Info
         "Electronic loyalty card system. Provides payment API"
-        (ContactPerson "support@joyn.com")
+        (Just <| ContactPerson "support@joyn.com")
         """
         99.9999% uptime
         Requires ssl
@@ -54,6 +54,6 @@ amazonInfo : Info
 amazonInfo =
     Info
         "Deliver stuff"
-        (ContactPerson "alexa@amazon.com")
+        (Just <| ContactPerson "alexa@amazon.com")
         """Requires ssl
         """
