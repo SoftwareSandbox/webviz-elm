@@ -10,13 +10,14 @@ import Model exposing (Model, Group, Endpoint)
 import Update exposing (Msg)
 
 
+mainGroupRadius : Int
 mainGroupRadius =
     42
 
 
 view : Model -> Html Msg
 view model =
-    Html.div [ Html.Attributes.style [ ( "height", "63%" ), ( "width", "63%" ) ] ]
+    Html.div [ Html.Attributes.style [ ( "height", "70%" ), ( "width", "70%" ) ] ]
         [ Html.h1 [] [ Html.text model.title ]
         , svg
             [ SvgAttrs.viewBox "0 0 1500 1500"
@@ -26,21 +27,58 @@ view model =
             , onClick <| Update.CanvasWasClicked model
             ]
           <|
-            (drawGroup model.mainGroup)
+            (List.append
+                (drawGroup model.mainGroup)
+                (drawGroups model.externalPartyGroups 0)
+            )
         ]
+
+
+drawGroups : List Group -> Int -> List (Svg Msg)
+drawGroups groups depth =
+    case groups of
+        [] ->
+            []
+
+        head :: tail ->
+            let
+                circleDegrees =
+                    (degrees (toFloat (220 - depth * 35)))
+
+                xMove =
+                    toString (round (toFloat mainGroupRadius * 25 * cos circleDegrees + 1100))
+
+                yMove =
+                    toString (round (toFloat mainGroupRadius * 25 * sin circleDegrees + 1100))
+
+                groupsSvg =
+                    drawGroups tail (depth + 1)
+
+                currentGroup =
+                    [ g [ SvgAttrs.transform <| "translate(" ++ xMove ++ "," ++ yMove ++ ")" ]
+                        [ g
+                            [ SvgAttrs.transform <| "rotate (180)" ]
+                            [ g
+                                [ SvgAttrs.transform <| "translate(-1100,-1100)" ]
+                                (drawGroup head)
+                            ]
+                        ]
+                    ]
+            in
+                List.append currentGroup groupsSvg
 
 
 drawGroup : Group -> List (Svg Msg)
 drawGroup mainGroup =
     let
         x =
-            500
+            1100
 
         y =
-            600
+            1100
 
         r =
-            10
+            9
 
         endpointsSvg =
             (drawEndPoints mainGroup.endpoints 0)

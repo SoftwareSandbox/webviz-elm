@@ -4,6 +4,7 @@ module Model exposing (..)
 type alias Model =
     { title : String
     , mainGroup : Group
+    , externalPartyGroups : List Group
     }
 
 
