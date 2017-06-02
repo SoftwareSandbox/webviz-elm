@@ -31,7 +31,7 @@ selectGroup model selectedGroup =
         updatedGroups =
             List.map (\group -> ({ group | selected = groupsHaveSameName group selectedGroup })) model.groups
     in
-        { model | groups = updatedGroups }
+    { model | groups = updatedGroups }
 
 
 deselectAllGroups : Model -> Model
@@ -40,9 +40,14 @@ deselectAllGroups model =
         deselectedGroups =
             List.map (\group -> { group | selected = False }) model.groups
     in
-        { model | groups = deselectedGroups }
+    { model | groups = deselectedGroups }
 
 
 groupsHaveSameName : Group -> Group -> Bool
 groupsHaveSameName left right =
     left.name == right.name
+
+
+getSelectedGroup : List Group -> Maybe Group
+getSelectedGroup groups =
+    List.head <| List.filter (\group -> group.selected == True) groups
