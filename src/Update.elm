@@ -17,4 +17,4 @@ update msg model =
             )
 
         CanvasWasClicked model ->
-            ( Model.deselectGroup model, Cmd.none )
+            ( Model.deselectAllGroups model, Cmd.none )

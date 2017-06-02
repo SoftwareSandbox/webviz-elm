@@ -26,10 +26,23 @@ type alias Info =
 
 
 selectGroup : Model -> Group -> Model
-selectGroup model group =
-    model
+selectGroup model selectedGroup =
+    let
+        updatedGroups =
+            List.map (\group -> ({ group | selected = groupsMatch group selectedGroup })) model.groups
+    in
+        { model | groups = updatedGroups }
 
 
-deselectGroup : Model -> Model
-deselectGroup model =
-    model
+deselectAllGroups : Model -> Model
+deselectAllGroups model =
+    let
+        deselectedGroups =
+            List.map (\group -> { group | selected = False }) model.groups
+    in
+        { model | groups = deselectedGroups }
+
+
+groupsMatch : Group -> Group -> Bool
+groupsMatch left right =
+    left.name == right.name
