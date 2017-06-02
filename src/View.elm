@@ -15,9 +15,16 @@ import Update exposing (Msg)
 -- purple "#cb9cfc"
 
 
-mainGroupRadius : Int
-mainGroupRadius =
-    42
+type alias GroupPosition =
+    { radius : Int
+    , x : Int
+    , y : Int
+    }
+
+
+mainGroupPosition : GroupPosition
+mainGroupPosition =
+    { radius = 42, x = 1500, y = 1500 }
 
 
 view : Model -> Html Msg
@@ -81,10 +88,10 @@ drawExternalGroups groups depth =
                     (degrees (toFloat (220 - depth * 55)))
 
                 xMove =
-                    toString (round (toFloat mainGroupRadius * 25 * cos circleDegreesLocation + 1100))
+                    toString (round (toFloat mainGroupPosition.radius * 25 * cos circleDegreesLocation + 1500))
 
                 yMove =
-                    toString (round (toFloat mainGroupRadius * 25 * sin circleDegreesLocation + 1100))
+                    toString (round (toFloat mainGroupPosition.radius * 25 * sin circleDegreesLocation + 1500))
 
                 circleDegreesRotation =
                     (toString (toFloat (-70 + depth * 55)))
@@ -99,7 +106,7 @@ drawExternalGroups groups depth =
                         [ g
                             [ SvgAttrs.transform <| "scale(-1,1) rotate (" ++ circleDegreesRotation ++ ")" ]
                             [ g
-                                [ SvgAttrs.transform <| "translate(-1100,-1100)" ]
+                                [ SvgAttrs.transform <| "translate(-" ++ toString mainGroupPosition.x ++ ",-" ++ toString mainGroupPosition.y ++ ")" ]
                                 (drawGroup head)
                             ]
                         ]
@@ -112,10 +119,10 @@ drawGroup : Group -> List (Svg Msg)
 drawGroup mainGroup =
     let
         x =
-            1100
+            mainGroupPosition.x
 
         y =
-            1100
+            mainGroupPosition.y
 
         r =
             7
@@ -128,7 +135,7 @@ drawGroup mainGroup =
                 (circle
                     [ SvgAttrs.cx <| toString 0
                     , SvgAttrs.cy <| toString 0
-                    , SvgAttrs.r <| toString mainGroupRadius
+                    , SvgAttrs.r <| toString mainGroupPosition.radius
                     , SvgAttrs.fill <| groupColorAsString mainGroup
                     , strokeWidth ".5"
                     , stroke "grey"
@@ -173,8 +180,8 @@ drawEndPoint endpoint depth =
     in
         List.singleton
             (circle
-                [ cx <| toString <| round <| toFloat mainGroupRadius * cos circleDegrees
-                , cy <| toString <| round <| toFloat mainGroupRadius * sin circleDegrees
+                [ cx <| toString <| round <| toFloat mainGroupPosition.radius * cos circleDegrees
+                , cy <| toString <| round <| toFloat mainGroupPosition.radius * sin circleDegrees
                 , strokeWidth ".5"
                 , stroke "black"
                 , r "5"
