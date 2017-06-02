@@ -13,7 +13,7 @@ subscriptions model =
 
 model : Model
 model =
-    Model "WebViz" mainGroup
+    Model "WebViz" mainGroup [ mainGroup ]
 
 
 mainGroup : Group
