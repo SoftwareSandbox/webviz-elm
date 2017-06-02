@@ -95,6 +95,8 @@ drawGroup mainGroup =
                     , SvgAttrs.cy <| toString 0
                     , SvgAttrs.r <| toString mainGroupRadius
                     , SvgAttrs.fill <| groupColorAsString mainGroup
+                    , strokeWidth ".5"
+                    , stroke "grey"
                     , onClickWithoutPropagation <| Update.GroupWasClicked mainGroup
                     ]
                     []
