@@ -31,16 +31,6 @@ externalGroup2 =
     Group "Amazon" [ Endpoint "endpoint1" ] False <| Info "info whatever"
 
 
-externalGroup3 : Group
-externalGroup3 =
-    Group "Bankcontact" [ Endpoint "endpoint1", Endpoint "endpoint2", Endpoint "endpoint3" ] False <| Info "info whatever"
-
-
-externalGroup4 : Group
-externalGroup4 =
-    Group "Belfius" [ Endpoint "endpoint1" ] False <| Info "info whatever"
-
-
 info : Info
 info =
     { name = "moobucks coffee shop" }
