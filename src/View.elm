@@ -179,6 +179,7 @@ drawEndPoint endpoint depth =
                 , stroke "black"
                 , r "5"
                 , fill "#d6bee0"
+                , SvgAttrs.name endpoint.name
                 ]
                 []
             )
