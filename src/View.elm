@@ -30,13 +30,13 @@ drawGroup : Group -> List (Svg Msg)
 drawGroup mainGroup =
     let
         x =
-            60
+            50
 
         y =
             60
 
         r =
-            25
+            30
 
         endpointsSvg =
             (drawEndPoints mainGroup.endpoints 0 x y r)
@@ -60,37 +60,37 @@ drawGroup mainGroup =
 
 
 drawEndPoints : List Endpoint -> Int -> Int -> Int -> Int -> List (Svg Msg)
-drawEndPoints endpoints dept cx cy r =
+drawEndPoints endpoints depth cx cy r =
+    case endpoints of
+        [] ->
+            []
+
+        head :: tail ->
+            let
+                endpointsSvg =
+                    drawEndPoints tail (depth + 1) cx cy r
+
+                currentCircle =
+                    drawEndPoint head depth cx cy r
+            in
+                List.append currentCircle endpointsSvg
+
+
+drawEndPoint : Endpoint -> Int -> Int -> Int -> Int -> List (Svg Msg)
+drawEndPoint endpoint depth cx cy r =
     let
-        firstElement =
-            List.head
-
-        restOfTheElements =
-            List.tail endpoints
-
-        endpointsSvg =
-            case restOfTheElements of
-                Nothing ->
-                    []
-
-                Just restOfTheElements ->
-                    (drawEndPoints restOfTheElements (dept + 1) cx cy r)
-
-        currentCircle =
-            List.singleton
-                (circle
-                    [ SvgAttrs.cx <| toString (cx + round (toFloat r * cos (degrees (toFloat (240 + dept * 10)))))
-                    , SvgAttrs.cy <| toString (cx + round (toFloat r * sin (degrees (toFloat (240 + dept * 10)))))
-                    , SvgAttrs.r "5"
-                    , SvgAttrs.fill "red"
-                    ]
-                    []
-                )
-
-        circleList =
-            List.append currentCircle endpointsSvg
+        circleDegrees =
+            (degrees (toFloat (240 - depth * 25)))
     in
-        circleList
+        List.singleton
+            (circle
+                [ SvgAttrs.cx <| toString (cx + round (toFloat r * cos circleDegrees))
+                , SvgAttrs.cy <| toString (cy + round (toFloat r * sin circleDegrees))
+                , SvgAttrs.r "5"
+                , SvgAttrs.fill "red"
+                ]
+                []
+            )
 
 
 onClickWithoutPropagation : msg -> Attribute msg
