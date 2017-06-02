@@ -29,7 +29,7 @@ selectGroup : Model -> Group -> Model
 selectGroup model selectedGroup =
     let
         updatedGroups =
-            List.map (\group -> ({ group | selected = groupsMatch group selectedGroup })) model.groups
+            List.map (\group -> ({ group | selected = groupsHaveSameName group selectedGroup })) model.groups
     in
         { model | groups = updatedGroups }
 
@@ -43,6 +43,6 @@ deselectAllGroups model =
         { model | groups = deselectedGroups }
 
 
-groupsMatch : Group -> Group -> Bool
-groupsMatch left right =
+groupsHaveSameName : Group -> Group -> Bool
+groupsHaveSameName left right =
     left.name == right.name
