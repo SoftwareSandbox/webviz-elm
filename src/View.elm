@@ -4,12 +4,13 @@ import Html exposing (Html)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onWithOptions)
 import Json.Decode as Json exposing (..)
+import Model exposing (Endpoint, Group, Model)
 import Svg exposing (..)
 import Svg.Attributes as SvgAttrs exposing (..)
-import Model exposing (Model, Group, Endpoint)
 import Update exposing (Msg)
 
 
+mainGroupRadius : number
 mainGroupRadius =
     42
 
@@ -18,6 +19,7 @@ view : Model -> Html Msg
 view model =
     Html.div [ Html.Attributes.style [ ( "height", "63%" ), ( "width", "63%" ) ] ]
         [ Html.h1 [] [ Html.text model.title ]
+        , renderInfoCard model.mainGroup
         , svg
             [ SvgAttrs.viewBox "0 0 1500 1500"
             , SvgAttrs.width "90%"
@@ -26,8 +28,16 @@ view model =
             , onClick <| Update.CanvasWasClicked model
             ]
           <|
-            (drawGroup model.mainGroup)
+            drawGroup model.mainGroup
         ]
+
+
+renderInfoCard : Group -> Html Msg
+renderInfoCard group =
+    if group.selected then
+        Html.div [ Html.Attributes.style [ ( "float", "right" ) ] ] [ Html.text group.info.name ]
+    else
+        Html.div [] []
 
 
 drawGroup : Group -> List (Svg Msg)
@@ -43,7 +53,7 @@ drawGroup mainGroup =
             10
 
         endpointsSvg =
-            (drawEndPoints mainGroup.endpoints 0)
+            drawEndPoints mainGroup.endpoints 0
 
         currentCircle =
             List.singleton
@@ -58,14 +68,14 @@ drawGroup mainGroup =
                 )
 
         circleList =
-            [ g [ SvgAttrs.transform <| "translate(" ++ (toString x) ++ "," ++ (toString y) ++ ") scale(" ++ (toString r) ++ ")" ]
+            [ g [ SvgAttrs.transform <| "translate(" ++ toString x ++ "," ++ toString y ++ ") scale(" ++ toString r ++ ")" ]
                 (List.append
                     currentCircle
                     endpointsSvg
                 )
             ]
     in
-        circleList
+    circleList
 
 
 drawEndPoints : List Endpoint -> Int -> List (Svg Msg)
@@ -82,24 +92,24 @@ drawEndPoints endpoints depth =
                 currentCircle =
                     drawEndPoint head depth
             in
-                List.append currentCircle endpointsSvg
+            List.append currentCircle endpointsSvg
 
 
 drawEndPoint : Endpoint -> Int -> List (Svg Msg)
 drawEndPoint endpoint depth =
     let
         circleDegrees =
-            (degrees (toFloat (240 - depth * 35)))
+            degrees (toFloat (240 - depth * 35))
     in
-        List.singleton
-            (circle
-                [ SvgAttrs.cx <| toString (round (toFloat mainGroupRadius * cos circleDegrees))
-                , SvgAttrs.cy <| toString (round (toFloat mainGroupRadius * sin circleDegrees))
-                , SvgAttrs.r "5"
-                , SvgAttrs.fill "red"
-                ]
-                []
-            )
+    List.singleton
+        (circle
+            [ SvgAttrs.cx <| toString (round (toFloat mainGroupRadius * cos circleDegrees))
+            , SvgAttrs.cy <| toString (round (toFloat mainGroupRadius * sin circleDegrees))
+            , SvgAttrs.r "5"
+            , SvgAttrs.fill "red"
+            ]
+            []
+        )
 
 
 onClickWithoutPropagation : msg -> Attribute msg
