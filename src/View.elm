@@ -4,22 +4,27 @@ import Html exposing (Html)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onWithOptions)
 import Json.Decode as Json exposing (..)
-import Model exposing (Endpoint, Group, Model)
+import Model exposing (Endpoint, Group, Model, getSelectedGroup)
 import Svg exposing (..)
 import Svg.Attributes as SvgAttrs exposing (..)
 import Update exposing (Msg)
 
 
-mainGroupRadius : number
+-- pale orange or whatever: "#f2d391"
+-- light purple "#d6bee0"
+-- purple "#cb9cfc"
+
+
+mainGroupRadius : Int
 mainGroupRadius =
     42
 
 
 view : Model -> Html Msg
 view model =
-    Html.div [ Html.Attributes.style [ ( "height", "63%" ), ( "width", "63%" ) ] ]
+    Html.div [ Html.Attributes.style [ ( "height", "70%" ), ( "width", "70%" ) ] ]
         [ Html.h1 [] [ Html.text model.title ]
-        , renderInfoCard model.mainGroup
+        , renderInfoCard <| getSelectedGroup model.groups
         , svg
             [ SvgAttrs.viewBox "0 0 1500 1500"
             , SvgAttrs.width "90%"
@@ -28,29 +33,71 @@ view model =
             , onClick <| Update.CanvasWasClicked model
             ]
           <|
-            drawGroup model.mainGroup
+            drawGroups model.groups 0
         ]
 
 
-renderInfoCard : Group -> Html Msg
+renderInfoCard : Maybe Group -> Html Msg
 renderInfoCard group =
-    if group.selected then
-        Html.div [ Html.Attributes.style [ ( "float", "right" ) ] ] [ Html.text group.info.name ]
-    else
-        Html.div [] []
+    case group of
+        Nothing ->
+            Html.div [] []
+
+        Just group ->
+            if group.selected then
+                Html.div [ Html.Attributes.style [ ( "float", "right" ) ] ] [ Html.text group.info.name ]
+            else
+                Html.div [] []
+
+
+drawGroups : List Group -> Int -> List (Svg Msg)
+drawGroups groups depth =
+    case groups of
+        [] ->
+            []
+
+        head :: tail ->
+            let
+                circleDegrees =
+                    degrees (toFloat (220 - depth * 35))
+
+                xMove =
+                    toString (round (toFloat mainGroupRadius * 25 * cos circleDegrees + 1100))
+
+                yMove =
+                    toString (round (toFloat mainGroupRadius * 25 * sin circleDegrees + 1100))
+
+                groupsSvg =
+                    [ g [ SvgAttrs.transform <| "translate(" ++ xMove ++ "," ++ yMove ++ ")" ]
+                        [ g
+                            [ SvgAttrs.transform <| "rotate (180)" ]
+                            [ g
+                                [ SvgAttrs.transform <| "translate(-1100,-1100)" ]
+                                (drawGroups
+                                    tail
+                                    (depth + 1)
+                                )
+                            ]
+                        ]
+                    ]
+
+                currentGroup =
+                    drawGroup head
+            in
+            List.append currentGroup groupsSvg
 
 
 drawGroup : Group -> List (Svg Msg)
 drawGroup mainGroup =
     let
         x =
-            500
+            1100
 
         y =
-            600
+            1100
 
         r =
-            10
+            9
 
         endpointsSvg =
             drawEndPoints mainGroup.endpoints 0
@@ -62,7 +109,7 @@ drawGroup mainGroup =
                     , SvgAttrs.cy <| toString 0
                     , SvgAttrs.r <| toString mainGroupRadius
                     , SvgAttrs.fill <| groupColorAsString mainGroup
-                    , onClickWithoutPropagation <| Update.BallWasClicked mainGroup
+                    , onClickWithoutPropagation <| Update.GroupWasClicked mainGroup
                     ]
                     []
                 )
@@ -106,7 +153,7 @@ drawEndPoint endpoint depth =
             [ SvgAttrs.cx <| toString (round (toFloat mainGroupRadius * cos circleDegrees))
             , SvgAttrs.cy <| toString (round (toFloat mainGroupRadius * sin circleDegrees))
             , SvgAttrs.r "5"
-            , SvgAttrs.fill "red"
+            , SvgAttrs.fill "#d6bee0"
             ]
             []
         )
@@ -136,11 +183,13 @@ groupColorAsString group =
 colorAsString : Color -> String
 colorAsString color =
     case color of
+        -- light purple
         MainGroupUnselected ->
-            "blue"
+            "#d6bee0"
 
+        -- purple
         MainGroupSelected ->
-            "orange"
+            "#cb9cfc"
 
 
 groupToColor : Group -> Color

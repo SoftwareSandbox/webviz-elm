@@ -1,9 +1,11 @@
 module Model exposing (..)
 
+-- first group in list must be the main group
+
 
 type alias Model =
     { title : String
-    , mainGroup : Group
+    , groups : List Group
     }
 
 
@@ -23,11 +25,29 @@ type alias Info =
     { name : String }
 
 
-selectGroup : Group -> Group
-selectGroup group =
-    { group | selected = True }
+selectGroup : Model -> Group -> Model
+selectGroup model selectedGroup =
+    let
+        updatedGroups =
+            List.map (\group -> { group | selected = groupsMatch group selectedGroup }) model.groups
+    in
+    { model | groups = updatedGroups }
 
 
-deselectGroup : Group -> Group
-deselectGroup group =
-    { group | selected = False }
+deselectAllGroups : Model -> Model
+deselectAllGroups model =
+    let
+        deselectedGroups =
+            List.map (\group -> { group | selected = False }) model.groups
+    in
+    { model | groups = deselectedGroups }
+
+
+groupsMatch : Group -> Group -> Bool
+groupsMatch left right =
+    left.name == right.name
+
+
+getSelectedGroup : List Group -> Maybe Group
+getSelectedGroup groups =
+    List.head <| List.filter (\group -> group.selected == True) groups
