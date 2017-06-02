@@ -1,10 +1,11 @@
 module Model exposing (..)
 
+-- first group in list must be the main group
+
 
 type alias Model =
     { title : String
-    , mainGroup : Group
-    , externalPartyGroups : List Group
+    , groups : List Group
     }
 
 
@@ -24,11 +25,11 @@ type alias Info =
     { name : String }
 
 
-selectGroup : Group -> Group
-selectGroup group =
-    { group | selected = True }
+selectGroup : Model -> Group -> Model
+selectGroup model group =
+    model
 
 
-deselectGroup : Group -> Group
-deselectGroup group =
-    { group | selected = False }
+deselectGroup : Model -> Model
+deselectGroup model =
+    model

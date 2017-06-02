@@ -13,12 +13,17 @@ subscriptions model =
 
 model : Model
 model =
-    Model "WebViz" mainGroup [ mainGroup ]
+    Model "WebViz" [ mainGroup, externalGroup1 ]
 
 
 mainGroup : Group
 mainGroup =
     Group "MooBucks" [ endpoint1, endpoint2 ] False info
+
+
+externalGroup1 : Group
+externalGroup1 =
+    Group "Joyn" [ endpoint1, endpoint2, endpoint2 ] False info
 
 
 endpoint1 : Endpoint

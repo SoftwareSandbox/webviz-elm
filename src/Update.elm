@@ -4,17 +4,17 @@ import Model exposing (Model, Group)
 
 
 type Msg
-    = BallWasClicked Group
+    = GroupWasClicked Group
     | CanvasWasClicked Model
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        BallWasClicked group ->
-            ( { model | mainGroup = Model.selectGroup group }
+        GroupWasClicked group ->
+            ( Model.selectGroup model group
             , Cmd.none
             )
 
         CanvasWasClicked model ->
-            ( { model | mainGroup = Model.deselectGroup model.mainGroup }, Cmd.none )
+            ( Model.deselectGroup model, Cmd.none )

@@ -14,6 +14,7 @@ import Update exposing (Msg)
 -- light purple "#d6bee0"
 -- purple "#cb9cfc"
 
+
 mainGroupRadius : Int
 mainGroupRadius =
     42
@@ -31,10 +32,7 @@ view model =
             , onClick <| Update.CanvasWasClicked model
             ]
           <|
-            (List.append
-                (drawGroup model.mainGroup)
-                (drawGroups model.externalPartyGroups 0)
-            )
+            (drawGroups model.groups 0)
         ]
 
 
@@ -56,18 +54,21 @@ drawGroups groups depth =
                     toString (round (toFloat mainGroupRadius * 25 * sin circleDegrees + 1100))
 
                 groupsSvg =
-                    drawGroups tail (depth + 1)
-
-                currentGroup =
                     [ g [ SvgAttrs.transform <| "translate(" ++ xMove ++ "," ++ yMove ++ ")" ]
                         [ g
                             [ SvgAttrs.transform <| "rotate (180)" ]
                             [ g
                                 [ SvgAttrs.transform <| "translate(-1100,-1100)" ]
-                                (drawGroup head)
+                                (drawGroups
+                                    tail
+                                    (depth + 1)
+                                )
                             ]
                         ]
                     ]
+
+                currentGroup =
+                    (drawGroup head)
             in
                 List.append currentGroup groupsSvg
 
@@ -94,7 +95,7 @@ drawGroup mainGroup =
                     , SvgAttrs.cy <| toString 0
                     , SvgAttrs.r <| toString mainGroupRadius
                     , SvgAttrs.fill <| groupColorAsString mainGroup
-                    , onClickWithoutPropagation <| Update.BallWasClicked mainGroup
+                    , onClickWithoutPropagation <| Update.GroupWasClicked mainGroup
                     ]
                     []
                 )
