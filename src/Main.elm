@@ -13,7 +13,7 @@ subscriptions model =
 
 model : Model
 model =
-    Model "WebViz" [ mainGroup, externalGroup1 ]
+    Model "WebViz" [ mainGroup, externalGroup1, externalGroup2, externalGroup3, externalGroup4 ]
 
 
 mainGroup : Group
@@ -24,6 +24,21 @@ mainGroup =
 externalGroup1 : Group
 externalGroup1 =
     Group "Joyn" [ { name = "payment" }, { name = "payment2" } ] False joyninfo
+
+
+externalGroup2 : Group
+externalGroup2 =
+    Group "Amazon" [ Endpoint "endpoint1" ] False <| Info "info whatever"
+
+
+externalGroup3 : Group
+externalGroup3 =
+    Group "Bankcontact" [ Endpoint "endpoint1", Endpoint "endpoint2", Endpoint "endpoint3" ] False <| Info "info whatever"
+
+
+externalGroup4 : Group
+externalGroup4 =
+    Group "Belfius" [ Endpoint "endpoint1" ] False <| Info "info whatever"
 
 
 info : Info

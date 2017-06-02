@@ -22,18 +22,18 @@ mainGroupRadius =
 
 view : Model -> Html Msg
 view model =
-    Html.div [ Html.Attributes.style [ ( "height", "70%" ), ( "width", "70%" ) ] ]
+    Html.div [ Html.Attributes.style [ ( "height", "90%" ), ( "width", "80%" ) ] ]
         [ Html.h1 [] [ Html.text model.title ]
         , renderInfoCard <| getSelectedGroup model.groups
         , svg
-            [ SvgAttrs.viewBox "0 0 1500 1500"
+            [ SvgAttrs.viewBox "0 0 4000 3000"
             , SvgAttrs.width "90%"
             , SvgAttrs.height "90%"
             , SvgAttrs.version "1.1"
             , onClick <| Update.CanvasWasClicked model
             ]
           <|
-            drawGroups model.groups 0
+            (drawGroups model.groups)
         ]
 
 
@@ -49,40 +49,60 @@ renderInfoCard group =
             else
                 Html.div [] []
 
-
-drawGroups : List Group -> Int -> List (Svg Msg)
-drawGroups groups depth =
+drawGroups : List Group -> List (Svg Msg)
+drawGroups groups =
     case groups of
         [] ->
             []
 
         head :: tail ->
             let
-                circleDegrees =
-                    degrees (toFloat (220 - depth * 35))
+                groupsSvg =
+                    drawExternalGroups
+                        tail
+                        0
+
+                currentGroup =
+                    (drawGroup head)
+            in
+                List.append currentGroup groupsSvg
+
+
+drawExternalGroups : List Group -> Int -> List (Svg Msg)
+drawExternalGroups groups depth =
+    case groups of
+        [] ->
+            []
+
+        head :: tail ->
+            let
+                circleDegreesLocation =
+                    (degrees (toFloat (220 - depth * 55)))
 
                 xMove =
-                    toString (round (toFloat mainGroupRadius * 25 * cos circleDegrees + 1100))
+                    toString (round (toFloat mainGroupRadius * 25 * cos circleDegreesLocation + 1100))
 
                 yMove =
-                    toString (round (toFloat mainGroupRadius * 25 * sin circleDegrees + 1100))
+                    toString (round (toFloat mainGroupRadius * 25 * sin circleDegreesLocation + 1100))
+
+                circleDegreesRotation =
+                    (toString (toFloat (-70 + depth * 55)))
 
                 groupsSvg =
+                    drawExternalGroups
+                        tail
+                        (depth + 1)
+
+                currentGroup =
                     [ g [ SvgAttrs.transform <| "translate(" ++ xMove ++ "," ++ yMove ++ ")" ]
                         [ g
-                            [ SvgAttrs.transform <| "rotate (180)" ]
+                            [ SvgAttrs.transform <| "scale(-1,1) rotate (" ++ circleDegreesRotation ++ ")" ]
                             [ g
                                 [ SvgAttrs.transform <| "translate(-1100,-1100)" ]
-                                (drawGroups
-                                    tail
-                                    (depth + 1)
-                                )
+                                (drawGroup head)
                             ]
                         ]
                     ]
-
-                currentGroup =
-                    drawGroup head
             in
             List.append currentGroup groupsSvg
 
@@ -97,7 +117,7 @@ drawGroup mainGroup =
             1100
 
         r =
-            9
+            7
 
         endpointsSvg =
             drawEndPoints mainGroup.endpoints 0
