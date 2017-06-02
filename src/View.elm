@@ -136,10 +136,12 @@ drawEndPoint endpoint depth =
     in
         List.singleton
             (circle
-                [ SvgAttrs.cx <| toString (round (toFloat mainGroupRadius * cos circleDegrees))
-                , SvgAttrs.cy <| toString (round (toFloat mainGroupRadius * sin circleDegrees))
-                , SvgAttrs.r "5"
-                , SvgAttrs.fill "#d6bee0"
+                [ cx <| toString <| round <| toFloat mainGroupRadius * cos circleDegrees
+                , cy <| toString <| round <| toFloat mainGroupRadius * sin circleDegrees
+                , strokeWidth ".5"
+                , stroke "black"
+                , r "5"
+                , fill "#d6bee0"
                 ]
                 []
             )
