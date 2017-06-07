@@ -133,6 +133,9 @@ drawExternalGroups groups depth =
 
 -- TODO: drawGroup relative to the "mainGroup", not just the mainGroupStartingPosition
 -- this implies that Groups, or at least MainGroup should know its coordinates/position
+-- Or maybe make an in between ViewModel, that just contains all of the calculated drawing information
+-- So you'd first map from Group to GroupView
+-- And then map GroupView to Svg
 
 
 drawGroup : Group -> List (Svg Msg)
@@ -193,10 +196,16 @@ drawEndPoint endpoint depth =
     let
         circleDegrees =
             degrees <| toFloat (240 - depth * 35)
+
+        xPositionOnCircle =
+            round <| mainGroupStartingPosition.radius * cos circleDegrees
+
+        yPositionOnCircle =
+            round <| mainGroupStartingPosition.radius * sin circleDegrees
     in
         [ circle
-            [ cx <| toString <| round <| mainGroupStartingPosition.radius * cos circleDegrees
-            , cy <| toString <| round <| mainGroupStartingPosition.radius * sin circleDegrees
+            [ cx <| toString <| xPositionOnCircle
+            , cy <| toString <| yPositionOnCircle
             , strokeWidth ".5"
             , stroke "black"
             , r "5"
