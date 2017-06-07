@@ -124,7 +124,8 @@ drawExternalGroups groups depth =
                             [ SvgAttrs.transform <| "scale(-1,1) rotate (" ++ circleDegreesRotation ++ ")" ]
                             [ g
                                 [ SvgAttrs.transform <| "translate(-" ++ toString mainGroupStartingPosition.x ++ ",-" ++ toString mainGroupStartingPosition.y ++ ")" ]
-                                (drawGroup head)
+                              <|
+                                drawGroup head
                             ]
                         ]
                     ]
@@ -167,11 +168,11 @@ drawGroup group =
                 )
 
         circleList =
-            [ g [ SvgAttrs.transform <| "translate(" ++ toString x ++ "," ++ toString y ++ ") scale(" ++ toString r ++ ")" ]
-                (List.append
-                    currentCircle
-                    endpointsSvg
-                )
+            [ g
+                [ SvgAttrs.transform <| "translate(" ++ toString x ++ "," ++ toString y ++ ") scale(" ++ toString r ++ ")" ]
+              <|
+                currentCircle
+                    ++ endpointsSvg
             ]
     in
         circleList
