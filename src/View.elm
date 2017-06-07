@@ -90,7 +90,7 @@ drawGroups groups =
                 currentGroup =
                     drawGroup head
             in
-                List.append currentGroup groupsSvg
+                currentGroup ++ groupsSvg
 
 
 drawExternalGroups : List Group -> Int -> List (Svg Msg)
@@ -130,7 +130,7 @@ drawExternalGroups groups depth =
                         ]
                     ]
             in
-                List.append currentGroup groupsSvg
+                currentGroup ++ groupsSvg
 
 
 
