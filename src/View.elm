@@ -102,10 +102,10 @@ drawExternalGroups groups depth =
                     degrees <| toFloat <| 220 - depth * 55
 
                 xMove =
-                    toString <| round <| mainGroupStartingPosition.radius * 25 * cos circleDegreesLocation + 1500
+                    round <| mainGroupStartingPosition.radius * 25 * cos circleDegreesLocation + 1500
 
                 yMove =
-                    toString <| round <| mainGroupStartingPosition.radius * 25 * sin circleDegreesLocation + 1500
+                    round <| mainGroupStartingPosition.radius * 25 * sin circleDegreesLocation + 1500
 
                 circleDegreesRotation =
                     toString <| toFloat <| -70 + depth * 55
@@ -116,11 +116,11 @@ drawExternalGroups groups depth =
                         (depth + 1)
 
                 currentGroup =
-                    [ g [ SvgAttrs.transform <| "translate(" ++ xMove ++ "," ++ yMove ++ ")" ]
+                    [ g [ SvgAttrs.transform <| svgTranslate ( xMove, yMove ) ]
                         [ g
                             [ SvgAttrs.transform <| "scale(-1,1) rotate (" ++ circleDegreesRotation ++ ")" ]
                             [ g
-                                [ SvgAttrs.transform <| "translate(-" ++ toString mainGroupStartingPosition.x ++ ",-" ++ toString mainGroupStartingPosition.y ++ ")" ]
+                                [ SvgAttrs.transform <| svgTranslate ( negate mainGroupStartingPosition.x, negate mainGroupStartingPosition.y ) ]
                               <|
                                 drawGroup head
                             ]
@@ -128,6 +128,11 @@ drawExternalGroups groups depth =
                     ]
             in
                 currentGroup ++ groupsSvg
+
+
+svgTranslate : ( Int, Int ) -> String
+svgTranslate ( x, y ) =
+    "translate(" ++ (toString x) ++ "," ++ (toString y) ++ ")"
 
 
 
@@ -167,7 +172,7 @@ drawGroup group =
             ]
     in
         [ g
-            [ SvgAttrs.transform <| "translate(" ++ toString x ++ "," ++ toString y ++ ") scale(" ++ toString r ++ ")" ]
+            [ SvgAttrs.transform <| svgTranslate ( x, y ) ++ "scale(" ++ toString r ++ ")" ]
           <|
             currentCircle
                 ++ endpointsSvg
