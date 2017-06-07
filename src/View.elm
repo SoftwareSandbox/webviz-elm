@@ -194,18 +194,17 @@ drawEndPoint endpoint depth =
         circleDegrees =
             degrees <| toFloat (240 - depth * 35)
     in
-        List.singleton
-            (circle
-                [ cx <| toString <| round <| mainGroupStartingPosition.radius * cos circleDegrees
-                , cy <| toString <| round <| mainGroupStartingPosition.radius * sin circleDegrees
-                , strokeWidth ".5"
-                , stroke "black"
-                , r "5"
-                , fill <| colorAsString MainGroupUnselected
-                , SvgAttrs.name endpoint.name
-                ]
-                []
-            )
+        [ circle
+            [ cx <| toString <| round <| mainGroupStartingPosition.radius * cos circleDegrees
+            , cy <| toString <| round <| mainGroupStartingPosition.radius * sin circleDegrees
+            , strokeWidth ".5"
+            , stroke "black"
+            , r "5"
+            , fill <| colorAsString MainGroupUnselected
+            , SvgAttrs.name endpoint.name
+            ]
+            []
+        ]
 
 
 onClickWithoutPropagation : msg -> Attribute msg
