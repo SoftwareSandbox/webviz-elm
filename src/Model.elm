@@ -9,6 +9,14 @@ type alias Model =
     }
 
 
+type alias MainGroup =
+    Group
+
+
+type alias ExternalGroup =
+    Group
+
+
 type alias Group =
     { name : String
     , endpoints : List Endpoint

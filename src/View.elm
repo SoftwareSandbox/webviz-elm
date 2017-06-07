@@ -16,14 +16,14 @@ import Update exposing (Msg)
 
 
 type alias GroupPosition =
-    { radius : Int
+    { radius : Float
     , x : Int
     , y : Int
     }
 
 
-mainGroupPosition : GroupPosition
-mainGroupPosition =
+mainGroupStartingPosition : GroupPosition
+mainGroupStartingPosition =
     { radius = 42, x = 1500, y = 1500 }
 
 
@@ -32,16 +32,18 @@ view model =
     Html.div [ Html.Attributes.style [ ( "height", "90%" ), ( "width", "80%" ) ] ]
         [ Html.h1 [] [ Html.text model.title ]
         , renderInfoCard <| getSelectedGroup model.groups
-        , svg
-            [ SvgAttrs.viewBox "0 0 4000 3000"
-            , SvgAttrs.width "90%"
-            , SvgAttrs.height "90%"
-            , SvgAttrs.version "1.1"
-            , onClick <| Update.CanvasWasClicked model
-            ]
-          <|
-            (drawGroups model.groups)
+        , svg (canvasAttributes model) <| drawGroups model.groups
         ]
+
+
+canvasAttributes : Model -> List (Html.Attribute Msg)
+canvasAttributes model =
+    [ SvgAttrs.viewBox "0 0 4000 3000"
+    , SvgAttrs.width "90%"
+    , SvgAttrs.height "90%"
+    , SvgAttrs.version "1.1"
+    , onClick <| Update.CanvasWasClicked model
+    ]
 
 
 renderInfoCard : Maybe Group -> Html Msg
@@ -86,7 +88,7 @@ drawGroups groups =
                         0
 
                 currentGroup =
-                    (drawGroup head)
+                    drawGroup head
             in
                 List.append currentGroup groupsSvg
 
@@ -100,13 +102,13 @@ drawExternalGroups groups depth =
         head :: tail ->
             let
                 circleDegreesLocation =
-                    (degrees (toFloat (220 - depth * 55)))
+                    degrees <| toFloat (220 - depth * 55)
 
                 xMove =
-                    toString (round (toFloat mainGroupPosition.radius * 25 * cos circleDegreesLocation + 1500))
+                    toString (round (mainGroupStartingPosition.radius * 25 * cos circleDegreesLocation + 1500))
 
                 yMove =
-                    toString (round (toFloat mainGroupPosition.radius * 25 * sin circleDegreesLocation + 1500))
+                    toString (round (mainGroupStartingPosition.radius * 25 * sin circleDegreesLocation + 1500))
 
                 circleDegreesRotation =
                     (toString (toFloat (-70 + depth * 55)))
@@ -121,7 +123,7 @@ drawExternalGroups groups depth =
                         [ g
                             [ SvgAttrs.transform <| "scale(-1,1) rotate (" ++ circleDegreesRotation ++ ")" ]
                             [ g
-                                [ SvgAttrs.transform <| "translate(-" ++ toString mainGroupPosition.x ++ ",-" ++ toString mainGroupPosition.y ++ ")" ]
+                                [ SvgAttrs.transform <| "translate(-" ++ toString mainGroupStartingPosition.x ++ ",-" ++ toString mainGroupStartingPosition.y ++ ")" ]
                                 (drawGroup head)
                             ]
                         ]
@@ -130,31 +132,36 @@ drawExternalGroups groups depth =
                 List.append currentGroup groupsSvg
 
 
+
+-- TODO: drawGroup relative to the "mainGroup", not just the mainGroupStartingPosition
+-- this implies that Groups, or at least MainGroup should know its coordinates/position
+
+
 drawGroup : Group -> List (Svg Msg)
-drawGroup mainGroup =
+drawGroup group =
     let
         x =
-            mainGroupPosition.x
+            mainGroupStartingPosition.x
 
         y =
-            mainGroupPosition.y
+            mainGroupStartingPosition.y
 
         r =
             7
 
         endpointsSvg =
-            drawEndPoints mainGroup.endpoints 0
+            drawEndPoints group.endpoints 0
 
         currentCircle =
             List.singleton
                 (circle
                     [ SvgAttrs.cx <| toString 0
                     , SvgAttrs.cy <| toString 0
-                    , SvgAttrs.r <| toString mainGroupPosition.radius
-                    , SvgAttrs.fill <| groupColorAsString mainGroup
+                    , SvgAttrs.r <| toString mainGroupStartingPosition.radius
+                    , SvgAttrs.fill <| groupColorAsString group
                     , strokeWidth ".5"
                     , stroke "grey"
-                    , onClickWithoutPropagation <| Update.GroupWasClicked mainGroup
+                    , onClickWithoutPropagation <| Update.GroupWasClicked group
                     ]
                     []
                 )
@@ -184,23 +191,23 @@ drawEndPoints endpoints depth =
                 currentCircle =
                     drawEndPoint head depth
             in
-                List.append currentCircle endpointsSvg
+                currentCircle ++ endpointsSvg
 
 
 drawEndPoint : Endpoint -> Int -> List (Svg Msg)
 drawEndPoint endpoint depth =
     let
         circleDegrees =
-            degrees (toFloat (240 - depth * 35))
+            degrees <| toFloat (240 - depth * 35)
     in
         List.singleton
             (circle
-                [ cx <| toString <| round <| toFloat mainGroupPosition.radius * cos circleDegrees
-                , cy <| toString <| round <| toFloat mainGroupPosition.radius * sin circleDegrees
+                [ cx <| toString <| round <| mainGroupStartingPosition.radius * cos circleDegrees
+                , cy <| toString <| round <| mainGroupStartingPosition.radius * sin circleDegrees
                 , strokeWidth ".5"
                 , stroke "black"
                 , r "5"
-                , fill "#d6bee0"
+                , fill <| colorAsString MainGroupUnselected
                 , SvgAttrs.name endpoint.name
                 ]
                 []
@@ -220,6 +227,8 @@ onClickWithoutPropagation message =
 type Color
     = MainGroupUnselected
     | MainGroupSelected
+    | ExternalGroupUnselected
+    | ExternalGroupSelected
 
 
 groupColorAsString : Group -> String
@@ -238,6 +247,14 @@ colorAsString color =
         -- purple
         MainGroupSelected ->
             "#cb9cfc"
+
+        -- light orange or whatever
+        ExternalGroupUnselected ->
+            "#f6d391"
+
+        -- orange or whatever
+        ExternalGroupSelected ->
+            "#f2d391"
 
 
 groupToColor : Group -> Color
