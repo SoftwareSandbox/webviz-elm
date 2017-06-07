@@ -154,28 +154,24 @@ drawGroup group =
             drawEndPoints group.endpoints 0
 
         currentCircle =
-            List.singleton
-                (circle
-                    [ SvgAttrs.cx <| toString 0
-                    , SvgAttrs.cy <| toString 0
-                    , SvgAttrs.r <| toString mainGroupStartingPosition.radius
-                    , SvgAttrs.fill <| groupColorAsString group
-                    , strokeWidth ".5"
-                    , stroke "grey"
-                    , onClickWithoutPropagation <| Update.GroupWasClicked group
-                    ]
-                    []
-                )
-
-        circleList =
-            [ g
-                [ SvgAttrs.transform <| "translate(" ++ toString x ++ "," ++ toString y ++ ") scale(" ++ toString r ++ ")" ]
-              <|
-                currentCircle
-                    ++ endpointsSvg
+            [ circle
+                [ SvgAttrs.cx <| toString 0
+                , SvgAttrs.cy <| toString 0
+                , SvgAttrs.r <| toString mainGroupStartingPosition.radius
+                , SvgAttrs.fill <| groupColorAsString group
+                , strokeWidth ".5"
+                , stroke "grey"
+                , onClickWithoutPropagation <| Update.GroupWasClicked group
+                ]
+                []
             ]
     in
-        circleList
+        [ g
+            [ SvgAttrs.transform <| "translate(" ++ toString x ++ "," ++ toString y ++ ") scale(" ++ toString r ++ ")" ]
+          <|
+            currentCircle
+                ++ endpointsSvg
+        ]
 
 
 drawEndPoints : List Endpoint -> Int -> List (Svg Msg)
@@ -251,16 +247,24 @@ colorAsString color =
 
         -- light orange or whatever
         ExternalGroupUnselected ->
-            "#f6d391"
-
-        -- orange or whatever
-        ExternalGroupSelected ->
             "#f2d391"
+
+        -- peach or whatever
+        ExternalGroupSelected ->
+            "#fec391"
 
 
 groupToColor : Group -> Color
-groupToColor group =
-    if group.selected then
-        MainGroupSelected
-    else
-        MainGroupUnselected
+groupToColor { selected, groupType } =
+    case ( selected, groupType ) of
+        ( True, Model.MainGroup ) ->
+            MainGroupSelected
+
+        ( False, Model.MainGroup ) ->
+            MainGroupUnselected
+
+        ( True, Model.ExternalGroup ) ->
+            ExternalGroupSelected
+
+        ( False, Model.ExternalGroup ) ->
+            ExternalGroupUnselected
