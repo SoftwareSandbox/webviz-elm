@@ -99,16 +99,16 @@ drawExternalGroups groups depth =
         head :: tail ->
             let
                 circleDegreesLocation =
-                    degrees <| toFloat (220 - depth * 55)
+                    degrees <| toFloat <| 220 - depth * 55
 
                 xMove =
-                    toString (round (mainGroupStartingPosition.radius * 25 * cos circleDegreesLocation + 1500))
+                    toString <| round <| mainGroupStartingPosition.radius * 25 * cos circleDegreesLocation + 1500
 
                 yMove =
-                    toString (round (mainGroupStartingPosition.radius * 25 * sin circleDegreesLocation + 1500))
+                    toString <| round <| mainGroupStartingPosition.radius * 25 * sin circleDegreesLocation + 1500
 
                 circleDegreesRotation =
-                    (toString (toFloat (-70 + depth * 55)))
+                    toString <| toFloat <| -70 + depth * 55
 
                 groupsSvg =
                     drawExternalGroups
@@ -216,6 +216,10 @@ onClickWithoutPropagation message =
         , preventDefault = True
         }
         (Json.succeed message)
+
+
+
+-- Stuff about colors
 
 
 type Color
