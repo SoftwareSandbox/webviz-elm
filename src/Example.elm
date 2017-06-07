@@ -11,6 +11,7 @@ model =
 moobucksGroup : Group
 moobucksGroup =
     Group
+        MainGroup
         "MooBucks"
         [ { name = "ordering" }, { name = "pricing" }, { name = "coffees" }, { name = "beans" } ]
         False
@@ -19,12 +20,12 @@ moobucksGroup =
 
 joynExternalGroup : Group
 joynExternalGroup =
-    Group "Joyn" [ { name = "payment" }, { name = "payment2" } ] False joyninfo
+    Group ExternalGroup "Joyn" [ { name = "payment" }, { name = "payment2" } ] False joyninfo
 
 
 amazonExternalGroup : Group
 amazonExternalGroup =
-    Group "Amazon" [ Endpoint "echo-orders" ] False <| amazonInfo
+    Group ExternalGroup "Amazon" [ Endpoint "echo-orders" ] False <| amazonInfo
 
 
 moobucksInfo : Info

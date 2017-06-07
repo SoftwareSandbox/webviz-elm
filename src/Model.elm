@@ -9,16 +9,14 @@ type alias Model =
     }
 
 
-type alias MainGroup =
-    Group
-
-
-type alias ExternalGroup =
-    Group
+type GroupType
+    = MainGroup
+    | ExternalGroup
 
 
 type alias Group =
-    { name : String
+    { groupType : GroupType
+    , name : String
     , endpoints : List Endpoint
     , selected : Bool
     , info : Info
