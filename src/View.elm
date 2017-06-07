@@ -10,6 +10,14 @@ import Svg.Attributes as SvgAttrs exposing (..)
 import Update exposing (Msg)
 
 
+-- TODO: drawGroup relative to the "mainGroup", not just the mainGroupStartingPosition
+-- this implies that Groups, or at least MainGroup should know its coordinates/position
+-- Or maybe make an in between ViewModel, that just contains all of the calculated drawing information
+-- So you'd first map from Group to GroupView
+-- And then map GroupView to Svg
+-- TODO: get rid of "magic numbers"
+
+
 type alias GroupPosition =
     { radius : Float
     , x : Int
@@ -133,14 +141,6 @@ drawExternalGroups groups depth =
 svgTranslate : ( Int, Int ) -> String
 svgTranslate ( x, y ) =
     "translate(" ++ (toString x) ++ "," ++ (toString y) ++ ")"
-
-
-
--- TODO: drawGroup relative to the "mainGroup", not just the mainGroupStartingPosition
--- this implies that Groups, or at least MainGroup should know its coordinates/position
--- Or maybe make an in between ViewModel, that just contains all of the calculated drawing information
--- So you'd first map from Group to GroupView
--- And then map GroupView to Svg
 
 
 drawGroup : Group -> List (Svg Msg)
