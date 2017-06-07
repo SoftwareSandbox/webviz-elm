@@ -83,9 +83,7 @@ drawGroups groups =
         head :: tail ->
             let
                 groupsSvg =
-                    drawExternalGroups
-                        tail
-                        0
+                    drawExternalGroups tail 0
 
                 currentGroup =
                     drawGroup head
@@ -93,7 +91,11 @@ drawGroups groups =
                 currentGroup ++ groupsSvg
 
 
-drawExternalGroups : List Group -> Int -> List (Svg Msg)
+type alias Depth =
+    Int
+
+
+drawExternalGroups : List Group -> Depth -> List (Svg Msg)
 drawExternalGroups groups depth =
     case groups of
         [] ->
@@ -174,7 +176,7 @@ drawGroup group =
         ]
 
 
-drawEndPoints : List Endpoint -> Int -> List (Svg Msg)
+drawEndPoints : List Endpoint -> Depth -> List (Svg Msg)
 drawEndPoints endpoints depth =
     case endpoints of
         [] ->
@@ -191,7 +193,7 @@ drawEndPoints endpoints depth =
                 currentCircle ++ endpointsSvg
 
 
-drawEndPoint : Endpoint -> Int -> List (Svg Msg)
+drawEndPoint : Endpoint -> Depth -> List (Svg Msg)
 drawEndPoint endpoint depth =
     let
         circleDegrees =
