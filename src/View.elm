@@ -10,11 +10,6 @@ import Svg.Attributes as SvgAttrs exposing (..)
 import Update exposing (Msg)
 
 
--- pale orange or whatever: "#f2d391"
--- light purple "#d6bee0"
--- purple "#cb9cfc"
-
-
 type alias GroupPosition =
     { radius : Float
     , x : Int
